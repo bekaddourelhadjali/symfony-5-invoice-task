@@ -12,6 +12,6 @@
 /vendor/
 /bin/
 /composer.phar
-.idea/
+/.idea/
 /var
 ###< symfony/framework-bundle ###
