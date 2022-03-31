@@ -1,6 +1,92 @@
 {% extends 'base.html.twig' %}
 {% block body %}
     {{ form_start(form) }}
-    {{ form_widget(form) }}
+    <div >
+        {{ form_errors(form) }}
+    </div>
+
+    <div class="row">
+        <div class="col">
+            {{ form_row(form.number) }}
+        </div>
+        <div class="col">
+            {{ form_row(form.date) }}
+        </div>
+        <div class="col">
+            {{ form_row(form.customer_id) }}
+        </div>
+    </div>
+    <!--table class="table">
+        <fieldset class="nv-title">Lines</fieldset>
+        <thead>
+            <tr>
+                <th>Description</th>
+                <th>Quantity</th>
+                <th>Amount</th>
+                <th>VAT Amount</th>
+                <th>Total VAT</th>
+            </tr>
+        </thead>
+        <tbody>
+        {#% for line in form.invoiceLines %}
+            <tr  >
+                <td> {{ form_row(line.description) }}</td>
+                <td> {{ form_row(line.quantity) }}</td>
+                <td> {{ form_row(line.amount) }}</td>
+                <td> {{ form_row(line.vatAmount) }}</td>
+                <td> {{ form_row(line.totalVat) }}</td>
+            </tr>
+        {% endfor %#}
+
+        </tbody>
+    </table-->
+    <br><br>
+    <div class="lines"    data-index="{{ form.invoiceLines|length > 0 ? form.invoiceLines|last.vars.name + 1 : 0 }}"
+        data-prototype="{{ form_widget(form.invoiceLines.vars.prototype)|e('html_attr') }}">
+        <div class="invoice-line">
+            <div>
+                <div>Description</div>
+                <div>Quantity</div>
+                <div>Amount</div>
+                <div>VAT Amount </div>
+                <div>Total VAT</div>
+            </div>
+        </div>
+    </div>
+    <button type="button" class="add_item_link float-right" data-collection-holder-class="lines">Add a line</button>
     {{ form_end(form) }}
+
+
 {% endblock %}
+
+
+{% block javascripts %}
+    <script src="{{ asset('build/js/app.js') }}"></script>
+    <script>
+        const addFormToCollection = (e) => {
+            const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
+
+            const item = document.createElement('div');
+            item.classList.add("invoice-line");
+            item.innerHTML = collectionHolder
+                .dataset
+                .prototype
+                .replace(
+                    /__name__/g,
+                    collectionHolder.dataset.index
+                );
+
+            collectionHolder.appendChild(item);
+
+            collectionHolder.dataset.index++;
+        };
+
+        document
+            .querySelectorAll('.add_item_link')
+            .forEach(btn => {
+                btn.addEventListener("click", addFormToCollection)
+            });
+
+    </script>
+{% endblock %}
+

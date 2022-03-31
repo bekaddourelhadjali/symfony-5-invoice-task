@@ -13,6 +13,7 @@ use App\Entity\Invoice;
 use App\Entity\InvoiceLine;
 use App\Form\InvoiceType;
 use App\Repository\InvoiceRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -62,12 +63,13 @@ class InvoiceController extends AbstractController
     public function add(Request $request){
             $invoice = new Invoice();
 
-            $line1 = new InvoiceLine();
-            $invoice->addLine($line1);
             $form   = $this->createForm(InvoiceType::class , $invoice);
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
+                foreach ($invoice->getInvoiceLines() as $line) {
+                    $invoice->addLine($line);
+                }
                 $entityManager = $this->doctrine->getManager();
                 $entityManager->persist($invoice);
                 $entityManager->flush();

@@ -23,10 +23,10 @@ class InvoiceLineType extends AbstractType
     {
         $builder
         ->add('description',TextareaType::class,['label'=>false])
-        ->add('quantity',IntegerType::class)
-        ->add('amount',NumberType::class,["html5"=>true])
-        ->add('vatAmount',NumberType::class,["html5"=>true])
-        ->add('totalVat',NumberType::class,["html5"=>true])
+        ->add('quantity',IntegerType::class,['label'=>false])
+        ->add('amount',NumberType::class,["html5"=>true,'label'=>false])
+        ->add('vatAmount',NumberType::class,["html5"=>true,'label'=>false])
+        ->add('totalVat',NumberType::class,["html5"=>true,'label'=>false])
         ;
 
     }
